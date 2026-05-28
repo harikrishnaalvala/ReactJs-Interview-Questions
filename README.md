@@ -1,6 +1,5 @@
 # ReactJs-Interview-Questions
 
-# 🌐 System Design & Architecture
 
 ## 1. Difference Between CSR, SSR, SSG, and ISR
 
