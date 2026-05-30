@@ -246,3 +246,167 @@ const { data, loading, error } = useFetch("/api/users");
 - Better maintainability
 
 ---
+
+## ❓ Virtual DOM vs Real DOM
+
+| Virtual DOM | Real DOM |
+|---|---|
+| Lightweight JavaScript object | Actual browser DOM |
+| Faster updates | Slower updates |
+| Efficient diffing | Expensive manipulation |
+
+### Why Virtual DOM Is Faster
+
+1. Creates a virtual representation
+2. Compares previous and new trees
+3. Updates only changed nodes
+
+---
+
+## ❓ What are Custom Hooks in React?
+
+Custom Hooks are reusable JavaScript functions that contain React Hook logic.
+
+### Example
+
+```javascript
+import { useState } from "react";
+
+function useCounter() {
+  const [count, setCount] = useState(0);
+
+  return {
+    count,
+    setCount
+  };
+}
+```
+
+### Benefits
+
+- Reusable logic
+- Cleaner components
+- Better maintainability
+
+---
+
+## ❓ Stateful vs Stateless Components
+
+| Stateful Components | Stateless Components |
+|---|---|
+| Manage state | No state |
+| Uses hooks/state | Receives props |
+| Handles logic | Primarily UI |
+
+### Stateful Example
+
+```javascript
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return <button>{count}</button>;
+}
+```
+
+### Stateless Example
+
+```javascript
+function Greeting({ name }) {
+  return <h1>{name}</h1>;
+}
+```
+
+---
+
+## ❓ How to Create Context in React?
+
+### Step 1: Create Context
+
+```javascript
+import { createContext } from "react";
+
+export const UserContext = createContext();
+```
+
+### Step 2: Provide Context
+
+```javascript
+<UserContext.Provider value={user}>
+  <App />
+</UserContext.Provider>
+```
+
+### Step 3: Consume Context
+
+```javascript
+const user = useContext(UserContext);
+```
+
+---
+
+## ❓ How Will You Handle Complex State Logic in React?
+
+### Recommended Approaches
+
+- useReducer
+- Context API
+- Redux Toolkit
+- Zustand
+
+### When to Use useReducer
+
+- Multiple state transitions
+- Related state updates
+- Complex business logic
+
+---
+
+## ❓ How Rendering Works in React?
+
+### Rendering Flow
+
+1. State or props change
+2. React creates a new Virtual DOM
+3. React compares previous and current Virtual DOM
+4. Diffing algorithm identifies changes
+5. React updates only changed nodes in Real DOM
+
+### Benefits
+
+- Faster UI updates
+- Better performance
+- Efficient DOM manipulation
+
+---
+
+# 📚 Quick Revision
+
+### HTML
+- Shadow DOM
+
+### CSS
+- Inline vs Block Elements
+- CSS Isolation
+- Adaptive vs Responsive Design
+- Tailwind CSS
+
+### JavaScript
+- Garbage Collection
+- Promises
+- Async/Await
+- TypeScript
+- Generics
+- API Security
+- Error Handling
+- API Versioning
+- API Monitoring
+
+### React
+- Virtual DOM
+- Custom Hooks
+- Context API
+- Stateful vs Stateless Components
+- Complex State Management
+- React Rendering Process
+
+---
