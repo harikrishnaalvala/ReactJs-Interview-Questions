@@ -1,0 +1,649 @@
+# ⚛️ React Interview Questions & Answers
+
+---
+
+# 1️⃣ How do you send data from a parent component to a child component?
+
+Data is passed from parent to child using **props**.
+
+### Parent Component
+
+```jsx
+function Parent() {
+  const name = "Hari";
+
+  return <Child name={name} />;
+}
+```
+
+### Child Component
+
+```jsx
+function Child({ name }) {
+  return <h1>{name}</h1>;
+}
+```
+
+### Use Cases
+
+- Passing user data
+- Configuration settings
+- API response data
+
+---
+
+# 2️⃣ How do you call a parent component method from a child component?
+
+Pass the parent method as a prop.
+
+### Parent
+
+```jsx
+function Parent() {
+  const showMessage = () => {
+    alert("Hello from Parent");
+  };
+
+  return <Child onClick={showMessage} />;
+}
+```
+
+### Child
+
+```jsx
+function Child({ onClick }) {
+  return (
+    <button onClick={onClick}>
+      Click
+    </button>
+  );
+}
+```
+
+---
+
+# 3️⃣ How do you access a DOM element in React?
+
+Using **useRef**.
+
+```jsx
+import { useRef } from "react";
+
+function App() {
+  const inputRef = useRef();
+
+  const focusInput = () => {
+    inputRef.current.focus();
+  };
+
+  return (
+    <>
+      <input ref={inputRef} />
+      <button onClick={focusInput}>
+        Focus
+      </button>
+    </>
+  );
+}
+```
+
+### Use Cases
+
+- Focus inputs
+- Video controls
+- Scroll handling
+
+---
+
+# 4️⃣ How to conditionally render elements or text?
+
+### Using Ternary Operator
+
+```jsx
+function App() {
+  const isLoggedIn = true;
+
+  return (
+    <>
+      {isLoggedIn
+        ? <h1>Welcome</h1>
+        : <h1>Please Login</h1>}
+    </>
+  );
+}
+```
+
+---
+
+### Using &&
+
+```jsx
+{
+  isLoggedIn &&
+  <h1>Dashboard</h1>
+}
+```
+
+---
+
+# 5️⃣ How to change styles based on a condition?
+
+```jsx
+function App() {
+  const isActive = true;
+
+  return (
+    <button
+      style={{
+        backgroundColor: isActive
+          ? "green"
+          : "gray"
+      }}
+    >
+      Submit
+    </button>
+  );
+}
+```
+
+### Using CSS Classes
+
+```jsx
+<button
+  className={
+    isActive
+      ? "active"
+      : "inactive"
+  }
+>
+  Submit
+</button>
+```
+
+---
+
+# 6️⃣ How to show and hide data conditionally?
+
+```jsx
+function App() {
+  const [show, setShow] =
+    useState(false);
+
+  return (
+    <>
+      <button
+        onClick={() =>
+          setShow(!show)
+        }
+      >
+        Toggle
+      </button>
+
+      {show && (
+        <p>Hidden Content</p>
+      )}
+    </>
+  );
+}
+```
+
+---
+
+# 7️⃣ How to implement debouncing in React?
+
+```jsx
+import { useEffect, useState } from "react";
+
+function Search() {
+  const [query, setQuery] =
+    useState("");
+
+  const [debounced,
+    setDebounced] =
+    useState("");
+
+  useEffect(() => {
+
+    const timer =
+      setTimeout(() => {
+        setDebounced(query);
+      }, 500);
+
+    return () =>
+      clearTimeout(timer);
+
+  }, [query]);
+
+  return (
+    <input
+      value={query}
+      onChange={(e) =>
+        setQuery(e.target.value)
+      }
+    />
+  );
+}
+```
+
+### Use Cases
+
+- Search bars
+- API calls
+- Auto-save
+
+---
+
+# 8️⃣ How to fetch data from an API and display it?
+
+```jsx
+import {
+  useEffect,
+  useState
+} from "react";
+
+function Users() {
+
+  const [users, setUsers] =
+    useState([]);
+
+  useEffect(() => {
+
+    fetch(
+      "https://jsonplaceholder.typicode.com/users"
+    )
+      .then(res => res.json())
+      .then(data =>
+        setUsers(data)
+      );
+
+  }, []);
+
+  return (
+    <>
+      {users.map(user => (
+        <p key={user.id}>
+          {user.name}
+        </p>
+      ))}
+    </>
+  );
+}
+```
+
+---
+
+# 9️⃣ How to re-render a component on value change?
+
+React automatically re-renders when:
+
+- State changes
+- Props change
+- Context changes
+
+```jsx
+const [count, setCount] =
+  useState(0);
+
+setCount(count + 1);
+```
+
+---
+
+# 🔟 How to call a method immediately after state updates?
+
+### Using useEffect
+
+```jsx
+const [count, setCount] =
+  useState(0);
+
+useEffect(() => {
+  console.log(
+    "Count Updated",
+    count
+  );
+}, [count]);
+```
+
+### Equivalent to
+
+```javascript
+componentDidUpdate()
+```
+
+---
+
+# 1️⃣1️⃣ How to force a component to rerender without useState?
+
+Using useReducer.
+
+```jsx
+const [, forceUpdate] =
+  useReducer(x => x + 1, 0);
+
+<button
+  onClick={forceUpdate}
+>
+  Refresh
+</button>
+```
+
+---
+
+# 1️⃣2️⃣ Optimization Using useMemo
+
+Used for expensive calculations.
+
+```jsx
+const total = useMemo(() => {
+
+  console.log("Calculating");
+
+  return products.reduce(
+    (sum, item) =>
+      sum + item.price,
+    0
+  );
+
+}, [products]);
+```
+
+### Benefits
+
+- Avoids recalculation
+- Improves performance
+
+---
+
+# 1️⃣3️⃣ Optimization Using useCallback
+
+Prevents unnecessary function recreation.
+
+```jsx
+const handleClick =
+  useCallback(() => {
+
+    console.log("Clicked");
+
+  }, []);
+```
+
+### Useful With
+
+```jsx
+React.memo()
+```
+
+---
+
+# 1️⃣4️⃣ Which lifecycle methods are replaced by useEffect?
+
+| Class Lifecycle | useEffect Equivalent |
+|-----------------|----------------------|
+| componentDidMount | useEffect(() => {}, []) |
+| componentDidUpdate | useEffect(() => {}, [dependency]) |
+| componentWillUnmount | Cleanup Function |
+
+### Example
+
+```jsx
+useEffect(() => {
+
+  return () => {
+    console.log(
+      "Component Removed"
+    );
+  };
+
+}, []);
+```
+
+---
+
+# 1️⃣5️⃣ How to share data using Context API?
+
+### Create Context
+
+```jsx
+import {
+  createContext
+} from "react";
+
+export const UserContext =
+  createContext();
+```
+
+---
+
+### Provider
+
+```jsx
+<UserContext.Provider
+  value={user}
+>
+  <App />
+</UserContext.Provider>
+```
+
+---
+
+### Consume
+
+```jsx
+const user =
+  useContext(UserContext);
+```
+
+---
+
+# 1️⃣6️⃣ How do you create a custom hook?
+
+```jsx
+import {
+  useState
+} from "react";
+
+function useCounter() {
+
+  const [count,
+    setCount] =
+    useState(0);
+
+  const increment =
+    () =>
+      setCount(
+        count + 1
+      );
+
+  return {
+    count,
+    increment
+  };
+}
+```
+
+### Usage
+
+```jsx
+const {
+  count,
+  increment
+} = useCounter();
+```
+
+---
+
+# 1️⃣7️⃣ How do you create a lazy-loaded component?
+
+```jsx
+import {
+  lazy,
+  Suspense
+} from "react";
+
+const Dashboard =
+  lazy(() =>
+    import("./Dashboard")
+  );
+
+function App() {
+  return (
+    <Suspense
+      fallback={<h1>Loading...</h1>}
+    >
+      <Dashboard />
+    </Suspense>
+  );
+}
+```
+
+### Benefits
+
+- Smaller bundle size
+- Faster initial load
+
+---
+
+# 1️⃣8️⃣ How do you build a pagination component?
+
+```jsx
+function Pagination({
+  totalPages,
+  currentPage,
+  setCurrentPage
+}) {
+
+  return (
+    <>
+      {[...Array(totalPages)]
+        .map((_, index) => (
+
+          <button
+            key={index}
+            onClick={() =>
+              setCurrentPage(
+                index + 1
+              )
+            }
+          >
+            {index + 1}
+          </button>
+
+      ))}
+    </>
+  );
+}
+```
+
+---
+
+# 1️⃣9️⃣ How do you safeguard your React application?
+
+### Security Best Practices
+
+#### Authentication
+
+- JWT
+- OAuth
+
+#### Authorization
+
+- Role-based access
+
+#### Prevent XSS
+
+```jsx
+Avoid:
+dangerouslySetInnerHTML
+```
+
+#### Secure API Calls
+
+- HTTPS
+- Secure tokens
+
+#### Environment Variables
+
+```env
+VITE_API_URL=
+```
+
+#### Input Validation
+
+- Client-side
+- Server-side
+
+---
+
+# 2️⃣0️⃣ Controlled vs Uncontrolled Components
+
+## Controlled Component
+
+React controls input state.
+
+```jsx
+function App() {
+
+  const [name,
+    setName] =
+    useState("");
+
+  return (
+    <input
+      value={name}
+      onChange={(e) =>
+        setName(
+          e.target.value
+        )
+      }
+    />
+  );
+}
+```
+
+### Benefits
+
+- Validation
+- Predictable state
+
+---
+
+## Uncontrolled Component
+
+DOM controls input value.
+
+```jsx
+function App() {
+
+  const inputRef =
+    useRef();
+
+  const submit = () => {
+    console.log(
+      inputRef.current.value
+    );
+  };
+
+  return (
+    <>
+      <input ref={inputRef} />
+
+      <button
+        onClick={submit}
+      >
+        Submit
+      </button>
+    </>
+  );
+}
+```
+
+### Comparison
+
+| Controlled | Uncontrolled |
+|------------|-------------|
+| React manages state | DOM manages state |
+| More control | Simpler |
+| Easier validation | Less code |
+
+---
