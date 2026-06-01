@@ -410,3 +410,177 @@ const user = useContext(UserContext);
 - React Rendering Process
 
 ---
+---
+
+# 1️⃣6️⃣ Fetch Data Using useEffect
+
+```jsx
+import { useEffect, useState } from "react";
+
+function Users() {
+
+  const [users, setUsers] =
+    useState([]);
+
+  useEffect(() => {
+
+    async function fetchUsers() {
+
+      const response =
+        await fetch(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+
+      const data =
+        await response.json();
+
+      setUsers(data);
+    }
+
+    fetchUsers();
+
+  }, []);
+
+  return (
+    <div>
+      {users.map(user => (
+        <p key={user.id}>
+          {user.name}
+        </p>
+      ))}
+    </div>
+  );
+}
+
+export default Users;
+```
+
+---
+
+# 1️⃣7️⃣ What are Controlled Components?
+
+Controlled components are form elements whose value is controlled by React state.
+
+### Example
+
+```jsx
+import { useState } from "react";
+
+function InputField() {
+
+  const [name, setName] =
+    useState("");
+
+  return (
+    <input
+      type="text"
+      value={name}
+      onChange={(e) =>
+        setName(e.target.value)
+      }
+    />
+  );
+}
+```
+
+### Benefits
+
+- Single source of truth
+- Easier validation
+- Better form control
+
+---
+
+# 1️⃣8️⃣ What is Redux?
+
+Redux is a predictable state management library used to manage global application state.
+
+---
+
+## Redux Flow
+
+```text
+Component
+   ↓
+Dispatch Action
+   ↓
+Reducer
+   ↓
+Store Updated
+   ↓
+Component Re-renders
+```
+
+---
+
+## Core Concepts
+
+### Store
+
+Central place that stores application state.
+
+```javascript
+const store =
+  configureStore({
+    reducer: {}
+  });
+```
+
+---
+
+### Action
+
+Describes what happened.
+
+```javascript
+{
+  type: "ADD_TODO"
+}
+```
+
+---
+
+### Reducer
+
+Updates state based on actions.
+
+```javascript
+function reducer(
+  state,
+  action
+) {
+  switch(action.type) {
+
+    case "ADD_TODO":
+      return {
+        ...state
+      };
+
+    default:
+      return state;
+  }
+}
+```
+
+---
+
+### Why Redux?
+
+- Centralized state
+- Predictable updates
+- Easier debugging
+- Middleware support
+- Scalable for large applications
+
+---
+
+## Context API vs Redux
+
+| Context API | Redux Toolkit |
+|------------|---------------|
+| Built into React | External library |
+| Small to medium apps | Large applications |
+| Less boilerplate | Advanced tooling |
+| Simpler setup | Better scalability |
+
+---
