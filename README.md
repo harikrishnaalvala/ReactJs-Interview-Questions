@@ -529,3 +529,459 @@ function reducer(
 | Simpler setup | Better scalability |
 
 ---
+
+## 6. How Does React Re-rendering Work?
+
+React re-renders when:
+
+- State changes
+- Props change
+- Context changes
+- Parent component re-renders
+
+### Example
+
+```jsx
+const [count, setCount] = useState(0);
+
+setCount(count + 1);
+```
+
+React creates a new Virtual DOM and compares it with the previous one.
+
+---
+
+## 7. Difference Between useMemo vs useCallback
+
+### useMemo
+
+Memoizes a value.
+
+```jsx
+const total = useMemo(() => {
+  return products.reduce(
+    (sum, p) => sum + p.price,
+    0
+  );
+}, [products]);
+```
+
+### useCallback
+
+Memoizes a function.
+
+```jsx
+const handleClick = useCallback(() => {
+  console.log("Clicked");
+}, []);
+```
+
+### Real Use Cases
+
+#### useMemo
+
+- Expensive calculations
+- Filtering large datasets
+
+#### useCallback
+
+- Passing callbacks to child components
+- React.memo optimization
+
+---
+
+## 8. How to Prevent Unnecessary Re-renders?
+
+### Use React.memo
+
+```jsx
+export default React.memo(UserCard);
+```
+
+### Use useMemo
+
+```jsx
+const filteredUsers =
+  useMemo(() => {
+    return users.filter(Boolean);
+  }, [users]);
+```
+
+### Use useCallback
+
+```jsx
+const onClick =
+  useCallback(() => {}, []);
+```
+
+### Split Components
+
+Avoid large parent re-renders.
+
+---
+
+## 9. How Does React Reconciliation Work?
+
+Reconciliation is React's diffing algorithm.
+
+### Process
+
+```text
+Old Virtual DOM
+↓
+New Virtual DOM
+↓
+Compare Differences
+↓
+Update Only Changed Nodes
+```
+
+### Benefits
+
+- Faster updates
+- Efficient DOM manipulation
+
+---
+
+## 10. When NOT to Use useEffect?
+
+Avoid useEffect for:
+
+### Derived State
+
+❌
+
+```jsx
+useEffect(() => {
+  setFullName(first + last);
+}, [first, last]);
+```
+
+✅
+
+```jsx
+const fullName = first + last;
+```
+
+### Event Handlers
+
+❌
+
+```jsx
+useEffect(() => {
+  if (clicked) {
+    save();
+  }
+}, [clicked]);
+```
+
+✅
+
+```jsx
+<button onClick={save}>
+```
+
+---
+
+# 🔥 Real-World Scenarios
+
+---
+
+## 11. API is Getting Called Twice — How Would You Debug It?
+
+### Common Reasons
+
+#### React Strict Mode
+
+Development mode intentionally runs effects twice.
+
+#### Dependency Issues
+
+```jsx
+useEffect(() => {
+  fetchData();
+}, [data]);
+```
+
+Can create loops.
+
+### Debugging Steps
+
+- Check dependency array
+- Inspect StrictMode
+- Use React DevTools
+- Add logs
+
+---
+
+## 12. How Do You Handle Loading, Error, and Empty States?
+
+```jsx
+if (loading)
+  return <p>Loading...</p>;
+
+if (error)
+  return <p>Error Occurred</p>;
+
+if (!data.length)
+  return <p>No Data Found</p>;
+```
+
+---
+
+## 13. How Do You Structure a Large React Application?
+
+```text
+src
+├── components
+├── pages
+├── hooks
+├── services
+├── context
+├── redux
+├── routes
+├── utils
+└── assets
+```
+
+### Benefits
+
+- Scalability
+- Maintainability
+- Better organization
+
+---
+
+## 14. How Do You Manage State Across Multiple Components?
+
+### Small Apps
+
+- Props
+- Context API
+
+### Medium Apps
+
+- useReducer
+- Context API
+
+### Large Apps
+
+- Redux Toolkit
+- Zustand
+
+---
+
+## 15. How Do You Handle Role-Based UI Permissions?
+
+```javascript
+const permissions = {
+  admin: ["create", "delete"],
+  user: ["view"]
+};
+```
+
+```jsx
+{
+  role === "admin" &&
+  <DeleteButton />
+}
+```
+
+### Backend Must Also Validate
+
+Frontend permissions are only for UI control.
+
+---
+
+# ⚡ Performance & Optimization
+
+---
+
+## 16. How to Optimize Large Table/List Rendering?
+
+### Virtualization
+
+Use:
+
+- react-window
+- react-virtualized
+
+### Example
+
+```jsx
+<FixedSizeList
+  height={500}
+  itemCount={10000}
+  itemSize={50}
+/>
+```
+
+### Benefits
+
+Render only visible rows.
+
+---
+
+## 17. What is Code Splitting and Lazy Loading?
+
+### Example
+
+```jsx
+const Dashboard =
+  React.lazy(() =>
+    import("./Dashboard")
+  );
+```
+
+```jsx
+<Suspense fallback={<Loading />}>
+  <Dashboard />
+</Suspense>
+```
+
+### Benefits
+
+- Smaller bundles
+- Faster initial load
+
+---
+
+## 18. How to Improve Initial Load Time?
+
+### Techniques
+
+- Lazy Loading
+- Code Splitting
+- Image Optimization
+- Tree Shaking
+- CDN Usage
+- Caching
+- Virtualization
+
+---
+
+# 💻 Coding Round
+
+---
+
+## 19. Searchable List with Debouncing
+
+```jsx
+const [query, setQuery] =
+  useState("");
+
+useEffect(() => {
+  const timer =
+    setTimeout(() => {
+      search(query);
+    }, 500);
+
+  return () =>
+    clearTimeout(timer);
+
+}, [query]);
+```
+
+---
+
+## 20. API Fetch with Loading & Error Handling
+
+```jsx
+const [loading, setLoading] =
+  useState(true);
+
+const [error, setError] =
+  useState(null);
+
+const [data, setData] =
+  useState([]);
+
+useEffect(() => {
+
+  async function fetchData() {
+
+    try {
+      const res =
+        await fetch("/api");
+
+      const json =
+        await res.json();
+
+      setData(json);
+
+    } catch (err) {
+
+      setError(err);
+
+    } finally {
+
+      setLoading(false);
+
+    }
+  }
+
+  fetchData();
+
+}, []);
+```
+
+---
+
+## 21. Optimize a Component to Avoid Re-renders
+
+```jsx
+const Child = React.memo(
+  ({ onClick }) => {
+    return (
+      <button
+        onClick={onClick}
+      >
+        Click
+      </button>
+    );
+  }
+);
+```
+
+```jsx
+const handleClick =
+  useCallback(() => {
+    console.log("Clicked");
+  }, []);
+```
+
+### Why?
+
+Without useCallback, a new function reference is created on every render.
+
+---
+
+# 📌 Quick Revision
+
+### JavaScript
+- Closures
+- Event Loop
+- Microtasks vs Macrotasks
+- Debouncing
+- Memory Leaks
+
+### React
+- Re-rendering
+- useMemo
+- useCallback
+- Reconciliation
+- useEffect
+
+### Real-World
+- API Debugging
+- Loading States
+- State Management
+- Role-Based Access
+
+### Performance
+- Virtualization
+- Lazy Loading
+- Code Splitting
+- Memoization
+
+---
