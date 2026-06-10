@@ -956,3 +956,245 @@ Without useCallback, a new function reference is created on every render.
 
 ---
 
+
+## What is Redux and Why Do We Need It?
+
+Redux is a predictable state management library used to manage global application state.
+
+### Why Redux?
+
+When data needs to be shared across multiple components, passing props through many levels (prop drilling) becomes difficult.
+
+```text
+App
+ ↓
+Parent
+ ↓
+Child
+ ↓
+GrandChild
+```
+
+Redux provides a centralized store for managing application state.
+
+### Benefits
+
+- Single source of truth
+- Predictable state updates
+- Easier debugging
+- Better scalability
+- Simplifies state sharing
+
+---
+
+## Explain the Redux Flow and How Redux is Set Up
+
+### Redux Flow
+
+```text
+Component
+   ↓
+Dispatch Action
+   ↓
+Reducer
+   ↓
+Store Updated
+   ↓
+Component Re-renders
+```
+
+### Store Setup
+
+```javascript
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./userSlice";
+
+export const store = configureStore({
+  reducer: {
+    users: userReducer,
+  },
+});
+```
+
+### Slice Setup
+
+```javascript
+import { createSlice } from "@reduxjs/toolkit";
+
+const userSlice = createSlice({
+  name: "users",
+  initialState: [],
+  reducers: {
+    addUser: (state, action) => {
+      state.push(action.payload);
+    },
+  },
+});
+
+export const { addUser } = userSlice.actions;
+export default userSlice.reducer;
+```
+
+### Provider Setup
+
+```jsx
+import { Provider } from "react-redux";
+import { store } from "./store";
+
+<Provider store={store}>
+  <App />
+</Provider>;
+```
+
+### Usage
+
+```jsx
+import { useSelector, useDispatch } from "react-redux";
+
+const users = useSelector((state) => state.users);
+const dispatch = useDispatch();
+```
+
+---
+
+
+## What is Context API and Which Hook is Used With It?
+
+Context API allows sharing data globally without prop drilling.
+
+### Create Context
+
+```jsx
+import { createContext } from "react";
+
+const UserContext = createContext();
+```
+
+### Provider
+
+```jsx
+<UserContext.Provider value={user}>
+  <App />
+</UserContext.Provider>
+```
+
+### Consume Context
+
+```jsx
+import { useContext } from "react";
+
+const user = useContext(UserContext);
+```
+
+### Hook Used
+
+```javascript
+useContext();
+```
+
+---
+
+
+##  How Did You Deploy Your React Project?
+
+### Frontend Deployment
+
+Platforms:
+
+- Vercel
+- Netlify
+
+Build Command:
+
+```bash
+npm run build
+```
+
+### Backend Deployment
+
+Platforms:
+
+- Render
+- Railway
+- AWS
+
+Example Answer:
+
+> I created a production build using `npm run build` and deployed the React application on Vercel. The backend APIs were deployed on Render.
+
+---
+
+##  React Project Architecture
+
+```text
+src/
+│
+├── api/
+├── assets/
+├── components/
+├── features/
+├── hooks/
+├── layouts/
+├── pages/
+├── routes/
+├── services/
+├── store/
+├── utils/
+└── App.jsx
+```
+
+### Principles
+
+- Feature-based folder structure
+- Reusable components
+- API abstraction layer
+- Redux Toolkit for state management
+- Lazy loading
+- Error boundaries
+- Custom hooks
+
+---
+
+
+
+##  What are REST APIs?
+
+REST (Representational State Transfer) is an architectural style used for communication between client and server.
+
+### Common HTTP Methods
+
+| Method | Purpose |
+|----------|----------|
+| GET | Retrieve Data |
+| POST | Create Data |
+| PUT | Update Entire Resource |
+| PATCH | Partial Update |
+| DELETE | Remove Resource |
+
+### Examples
+
+```http
+GET /users
+GET /users/1
+POST /users
+PUT /users/1
+DELETE /users/1
+```
+
+### Sample Response
+
+```json
+{
+  "id": 1,
+  "name": "Harikrishna",
+  "email": "hari@example.com"
+}
+```
+
+### Characteristics
+
+- Stateless
+- Client-Server Architecture
+- Resource-Based URLs
+- Uses HTTP Protocol
+- Supports JSON/XML Responses
